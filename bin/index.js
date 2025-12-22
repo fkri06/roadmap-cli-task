@@ -19,6 +19,10 @@ function listTasks() {
     console.log("list tasks");
 }
 
+function markTask() {
+    console.log("mark task");
+}
+
 switch (args[0]) {
     case "add":
         addTask();
@@ -34,6 +38,14 @@ switch (args[0]) {
 
     case "list":
         listTasks();
+        break;
+
+    case "mark-in-progress":
+        markTask();
+        break;
+
+    case "mark-done":
+        markTask();
         break;
 
     default:
