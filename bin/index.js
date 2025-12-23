@@ -51,8 +51,19 @@ async function updateTask(taskId, updatedData) {
 
 }
 
-function deleteTask() {
-    console.log("delete task");
+async function deleteTask(taskId) {
+    if (taskId === undefined || taskId === "") {
+        throw new Error("You haven't provided the task id to update task.");
+    }
+
+    const getData = await readData();
+
+    if (getData[taskId] == undefined) {
+        throw new Error(`There's no task with id ${taskId}`);
+    }
+
+    delete getData[taskId];
+    await writeData(getData);
 }
 
 function listTasks() {
@@ -102,7 +113,13 @@ switch (args[0]) {
         break;
 
     case "delete":
-        deleteTask();
+
+        try {
+            await deleteTask(args[1]);
+        } catch (err) {
+            console.error(`${err.name}: ${err.message}`);
+        }
+
         break;
 
     case "list":
