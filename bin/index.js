@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import fs from "fs/promises";
+
 const args = process.argv.slice(2);
 
 
@@ -21,6 +23,32 @@ function listTasks() {
 
 function markTask() {
     console.log("mark task");
+}
+
+async function readData() {
+    try {
+        const getData = await fs.readFile("./data/data.json", "utf8");
+        const data = JSON.parse(getData);
+        return data;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+async function writeData(newData) {
+    try {
+
+        const getData = await fs.readFile("./data/data.json");
+        const data = JSON.parse(getData);
+
+        // add the new data
+        data[counter] = newData;
+
+        await fs.writeFile("./data/data.json", JSON.stringify(data), "utf8");
+
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 switch (args[0]) {
