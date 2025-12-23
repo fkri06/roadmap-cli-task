@@ -4,9 +4,30 @@ import fs from "fs/promises";
 
 const args = process.argv.slice(2);
 
+async function addTask(newTask) {
 
-function addTask() {
-    console.log("add task");
+    if (newTask == undefined) {
+        throw new Error("You haven't provided the task.")
+    }
+
+    const date = `${new Date().getDate()}-${new Date().getMonth()}-${new Date().getFullYear()}`;
+    const time = `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`;
+
+    const newData = {
+        description: newTask,
+        status: "",
+        createdAt: `${date} at ${time}`,
+        updatedAt: `${date} at ${time}`
+    };
+
+    let getData = await readData();
+    let taskId = getData["latestId"] + 1;
+
+    getData[taskId] = newData;
+    getData["latestId"] = taskId;
+
+    await writeData(getData);
+    console.log(`Task "${newTask}" added successfully (ID: ${taskId})`);
 }
 
 function updateTask() {
@@ -31,29 +52,26 @@ async function readData() {
         const data = JSON.parse(getData);
         return data;
     } catch (err) {
-        console.error(err);
+        console.error(err.message);
     }
 }
 
 async function writeData(newData) {
     try {
-
-        const getData = await fs.readFile("./data/data.json");
-        const data = JSON.parse(getData);
-
-        // add the new data
-        data[counter] = newData;
-
-        await fs.writeFile("./data/data.json", JSON.stringify(data), "utf8");
-
+        await fs.writeFile("./data/data.json", JSON.stringify(newData), "utf8");
     } catch (err) {
-        console.log(err);
+        console.log(err.message);
     }
 }
 
 switch (args[0]) {
     case "add":
-        addTask();
+        try {
+            addTask(args[1]);
+        } catch (err) {
+            console.error(err.message);
+        }
+
         break;
 
     case "update":
