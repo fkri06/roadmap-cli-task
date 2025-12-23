@@ -30,8 +30,25 @@ async function addTask(newTask) {
     console.log(`Task "${newTask}" added successfully (ID: ${taskId})`);
 }
 
-function updateTask() {
-    console.log("update task");
+async function updateTask(taskId, updatedData) {
+
+    if (taskId === undefined || taskId === "") {
+        throw new Error("You haven't provided the task id to update task.");
+    }
+
+    const getData = await readData();
+
+    if (getData[taskId] === undefined) {
+        throw new Error(`There's no task with id ${taskId}`);
+    }
+    const date = `${new Date().getDate()}-${new Date().getMonth()}-${new Date().getFullYear()}`;
+    const time = `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`;
+
+    getData[taskId]["description"] = updatedData;
+    getData[taskId]["updatedAt"] = `${date} at ${time}`;
+
+    await writeData(getData);
+
 }
 
 function deleteTask() {
@@ -67,15 +84,21 @@ async function writeData(newData) {
 switch (args[0]) {
     case "add":
         try {
-            addTask(args[1]);
+            await addTask(args[1]);
         } catch (err) {
-            console.error(err.message);
+            console.error(`${err.name}: ${err.message}`);
         }
 
         break;
 
     case "update":
-        updateTask();
+
+        try {
+            await updateTask(args[1], args[2]);
+        } catch (err) {
+            console.error(`${err.name}: ${err.message}`);
+        }
+
         break;
 
     case "delete":
