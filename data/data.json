@@ -1,0 +1,27 @@
+{
+    "1": {
+        "description": "Get ready (shower, brush teeth)",
+        "status": "done",
+        "createdAt": "24-11-2025 at 13:41:39",
+        "updatedAt": "24-11-2025 at 13:43:51"
+    },
+    "2": {
+        "description": "Eat breakfast",
+        "status": "todo",
+        "createdAt": "24-11-2025 at 13:42:0",
+        "updatedAt": "24-11-2025 at 13:42:0"
+    },
+    "3": {
+        "description": "Schoolwork/homework",
+        "status": "in-progress",
+        "createdAt": "24-11-2025 at 13:42:14",
+        "updatedAt": "24-11-2025 at 13:44:4"
+    },
+    "4": {
+        "description": "Free time (game, read, relax)",
+        "status": "todo",
+        "createdAt": "24-11-2025 at 13:42:21",
+        "updatedAt": "24-11-2025 at 13:45:19"
+    },
+    "latestId": 4
+}
