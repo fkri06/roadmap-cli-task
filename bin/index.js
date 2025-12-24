@@ -66,8 +66,31 @@ async function deleteTask(taskId) {
     await writeData(getData);
 }
 
-function listTasks() {
-    console.log("list tasks");
+function printTasks(status, data) {
+    for (const id in data) {
+        if (id === "latestId") continue;
+        if (status !== "" && status !== data[id].status) continue;
+
+        console.log(`ID [${id}] --- Status:${data[id].status}`);
+        console.log(`---> ${data[id].description}\n`);
+    }
+}
+
+async function listTasks(flag) {
+
+    const getData = await readData();
+
+    if (flag === undefined) {
+        printTasks("", getData);
+    } else if (flag.toLowerCase() === "done") {
+        printTasks("done", getData);
+    } else if (flag.toLowerCase() === "todo") {
+        printTasks("todo", getData);
+    } else if (flag.toLowerCase() === "in-progress") {
+        printTasks("in-progress", getData);
+    } else {
+        throw new Error(`Invalid command (${flag})`);
+    }
 }
 
 async function markTask(markStatus, taskId) {
@@ -145,7 +168,13 @@ switch (args[0]) {
         break;
 
     case "list":
-        listTasks();
+
+        try {
+            await listTasks(args[1]);
+        } catch (err) {
+            console.error(`${err.name}: ${err.message}`);
+        }
+
         break;
 
     case "mark-in-progress":
