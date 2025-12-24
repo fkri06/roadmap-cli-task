@@ -88,6 +88,11 @@ async function markTask(markStatus, taskId) {
         getData[taskId]["status"] = "done";
     }
 
+    const date = `${new Date().getDate()}-${new Date().getMonth()}-${new Date().getFullYear()}`;
+    const time = `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`;
+
+    getData[taskId]["updatedAt"] = `${date} at ${time}`;
+
     await writeData(getData);
 }
 
