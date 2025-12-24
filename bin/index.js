@@ -70,8 +70,25 @@ function listTasks() {
     console.log("list tasks");
 }
 
-function markTask() {
-    console.log("mark task");
+async function markTask(markStatus, taskId) {
+
+    if (taskId === undefined || taskId === "") {
+        throw new Error("You haven't provided the task id to mark task.");
+    }
+
+    const getData = await readData();
+
+    if (getData[taskId] === undefined) {
+        throw new Error(`Task with id ${taskId} doesn't exist.`);
+    }
+
+    if (markStatus.toLowerCase() === "mark-in-progress") {
+        getData[taskId]["status"] = "in-progress";
+    } else {
+        getData[taskId]["status"] = "done";
+    }
+
+    await writeData(getData);
 }
 
 async function readData() {
@@ -127,7 +144,11 @@ switch (args[0]) {
         break;
 
     case "mark-in-progress":
-        markTask();
+        try {
+            await markTask("mark-in-progress", args[1]);
+        } catch (err) {
+            console.error(`${err.name}: ${err.message}`);
+        }
         break;
 
     case "mark-done":
