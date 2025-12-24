@@ -15,7 +15,7 @@ async function addTask(newTask) {
 
     const newData = {
         description: newTask,
-        status: "",
+        status: "todo",
         createdAt: `${date} at ${time}`,
         updatedAt: `${date} at ${time}`
     };
