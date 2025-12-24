@@ -152,7 +152,11 @@ switch (args[0]) {
         break;
 
     case "mark-done":
-        markTask();
+        try {
+            await markTask("mark-done", args[1]);
+        } catch (err) {
+            console.error(`${err.name}: ${err.message}`);
+        }
         break;
 
     default:
