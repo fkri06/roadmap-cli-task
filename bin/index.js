@@ -4,20 +4,25 @@ import fs from "fs/promises";
 
 const args = process.argv.slice(2);
 
+function getDate() {
+    const date = `${new Date().getDate()}-${new Date().getMonth()}-${new Date().getFullYear()}`;
+    const time = `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`;
+    return `${date} at ${time}`;
+}
+
 async function addTask(newTask) {
 
     if (newTask == undefined) {
         throw new Error("You haven't provided the task.")
     }
 
-    const date = `${new Date().getDate()}-${new Date().getMonth()}-${new Date().getFullYear()}`;
-    const time = `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`;
+    const date = getDate();
 
     const newData = {
         description: newTask,
         status: "todo",
-        createdAt: `${date} at ${time}`,
-        updatedAt: `${date} at ${time}`
+        createdAt: date,
+        updatedAt: date
     };
 
     let getData = await readData();
@@ -41,11 +46,11 @@ async function updateTask(taskId, updatedData) {
     if (getData[taskId] === undefined) {
         throw new Error(`There's no task with id ${taskId}`);
     }
-    const date = `${new Date().getDate()}-${new Date().getMonth()}-${new Date().getFullYear()}`;
-    const time = `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`;
+
+    const date = getDate();
 
     getData[taskId]["description"] = updatedData;
-    getData[taskId]["updatedAt"] = `${date} at ${time}`;
+    getData[taskId]["updatedAt"] = date;
 
     await writeData(getData);
 
@@ -111,10 +116,9 @@ async function markTask(markStatus, taskId) {
         getData[taskId]["status"] = "done";
     }
 
-    const date = `${new Date().getDate()}-${new Date().getMonth()}-${new Date().getFullYear()}`;
-    const time = `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`;
+    const date = getDate()
 
-    getData[taskId]["updatedAt"] = `${date} at ${time}`;
+    getData[taskId]["updatedAt"] = date;
 
     await writeData(getData);
 }
